@@ -1,0 +1,88 @@
+
+attiny13a_softPWM.elf:     формат файла elf32-avr
+
+Разделы:
+Инд Имя           Размер    VMA       LMA       Файл      Вырав
+  0 .text         00000076  00000000  00000000  00000054  2**1
+                  CONTENTS, ALLOC, LOAD, READONLY, CODE
+  1 .data         00000000  00800060  00800060  000000ca  2**0
+                  CONTENTS, ALLOC, LOAD, DATA
+  2 .comment      00000011  00000000  00000000  000000ca  2**0
+                  CONTENTS, READONLY
+  3 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  000000dc  2**2
+                  CONTENTS, READONLY
+
+Дизассемблирование раздела .text:
+
+00000000 <__vectors>:
+   0:	09 c0       	rjmp	.+18     	; 0x14 <__ctors_end>
+   2:	0e c0       	rjmp	.+28     	; 0x20 <__bad_interrupt>
+   4:	0d c0       	rjmp	.+26     	; 0x20 <__bad_interrupt>
+   6:	0c c0       	rjmp	.+24     	; 0x20 <__bad_interrupt>
+   8:	0b c0       	rjmp	.+22     	; 0x20 <__bad_interrupt>
+   a:	0a c0       	rjmp	.+20     	; 0x20 <__bad_interrupt>
+   c:	0a c0       	rjmp	.+20     	; 0x22 <__vector_6>
+   e:	08 c0       	rjmp	.+16     	; 0x20 <__bad_interrupt>
+  10:	07 c0       	rjmp	.+14     	; 0x20 <__bad_interrupt>
+  12:	06 c0       	rjmp	.+12     	; 0x20 <__bad_interrupt>
+
+00000014 <__ctors_end>:
+  14:	11 24       	eor	r1, r1
+  16:	1f be       	out	0x3f, r1	; 63
+  18:	cf e9       	ldi	r28, 0x9F	; 159
+  1a:	cd bf       	out	0x3d, r28	; 61
+  1c:	1b d0       	rcall	.+54     	; 0x54 <main>
+  1e:	29 c0       	rjmp	.+82     	; 0x72 <_exit>
+
+00000020 <__bad_interrupt>:
+  20:	ef cf       	rjmp	.-34     	; 0x0 <__vectors>
+
+00000022 <__vector_6>:
+  22:	1f 92       	push	r1
+  24:	0f 92       	push	r0
+  26:	0f b6       	in	r0, 0x3f	; 63
+  28:	0f 92       	push	r0
+  2a:	11 24       	eor	r1, r1
+  2c:	8f 93       	push	r24
+  2e:	81 e0       	ldi	r24, 0x01	; 1
+  30:	80 0f       	add	r24, r16
+  32:	08 2f       	mov	r16, r24
+  34:	83 30       	cpi	r24, 0x03	; 3
+  36:	10 f4       	brcc	.+4      	; 0x3c <__vector_6+0x1a>
+  38:	e8 0e       	add	r14, r24
+  3a:	03 c0       	rjmp	.+6      	; 0x42 <__SREG__+0x3>
+  3c:	ee 24       	eor	r14, r14
+  3e:	e3 94       	inc	r14
+  40:	00 e0       	ldi	r16, 0x00	; 0
+  42:	e8 ba       	out	0x18, r14	; 24
+  44:	8e ee       	ldi	r24, 0xEE	; 238
+  46:	82 bf       	out	0x32, r24	; 50
+  48:	8f 91       	pop	r24
+  4a:	0f 90       	pop	r0
+  4c:	0f be       	out	0x3f, r0	; 63
+  4e:	0f 90       	pop	r0
+  50:	1f 90       	pop	r1
+  52:	18 95       	reti
+
+00000054 <main>:
+  54:	86 e0       	ldi	r24, 0x06	; 6
+  56:	e8 2e       	mov	r14, r24
+  58:	00 e0       	ldi	r16, 0x00	; 0
+  5a:	87 e0       	ldi	r24, 0x07	; 7
+  5c:	87 bb       	out	0x17, r24	; 23
+  5e:	84 e0       	ldi	r24, 0x04	; 4
+  60:	89 bf       	out	0x39, r24	; 57
+  62:	83 b7       	in	r24, 0x33	; 51
+  64:	84 60       	ori	r24, 0x04	; 4
+  66:	83 bf       	out	0x33, r24	; 51
+  68:	12 be       	out	0x32, r1	; 50
+  6a:	78 94       	sei
+  6c:	8c e0       	ldi	r24, 0x0C	; 12
+  6e:	86 bf       	out	0x36, r24	; 54
+  70:	fe cf       	rjmp	.-4      	; 0x6e <main+0x1a>
+
+00000072 <_exit>:
+  72:	f8 94       	cli
+
+00000074 <__stop_program>:
+  74:	ff cf       	rjmp	.-2      	; 0x74 <__stop_program>
